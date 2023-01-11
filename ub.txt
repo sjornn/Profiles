@@ -1,0 +1,114 @@
+set sample_name "UB CS 4.7 Profile";
+
+# Sleeptime
+set sleeptime "50000";
+set jitter "37";
+
+set data_jitter "100";
+
+set useragent "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko";
+
+http-config {
+    set headers "Date, Server, Content-Length, Connection, Content-Type";
+    header "Server" "nginx";
+    header "Connection" "close";
+    # Needed when team server is behind redirector
+    set trust_x_forwarded_for "true";
+    # Block specific user agents
+    set block_useragents "curl*,lynx*,wget*";
+}
+
+http-get {
+    set verb "POST";
+    set uri "/aspx/read.aspx";
+    client {
+        #header "Host" "www.ru.nl";
+        header "Accept" "application/json, text/javascript, */*; q=0.01";
+        header "Content-Type" "application/x-www-form-urlencoded; charset=UTF-8";
+        header "Referer" "https://www.ru.nl/";
+        header "Accept-Encoding" "gzip, deflate";
+        # Hide our metadata in the cookie header
+        metadata {
+            mask;
+            base64url;
+            prepend "cookie-agreed-version=1.0.0; cookie-agreed=2; _fbp=fb.1.1670593551589.1024575632; _ga=GA1.2.23700656.1670593551; _ga_";
+            append "=GS1.1.1670593550.1.1.1670593571.0.0.0; cookie_notification=functional; _gid=GA1.2.2062466150.1670764872; cookies_consent=-1";
+            header "Cookie";
+        }
+    }
+    server {
+        output {
+            mask;
+            base64url;
+            prepend "{'token':'','session_csrf_id':'3db520a3ae2d48a1b36917c938277538','startEnvIdt':'2','root':'https://cms.ru.nl/','elements':[{'id':'";
+            append "','screens':[{'alias':'login','size':'Small','args':{'AppIdt':'00000000','exitAppIdt':'00000000'}}]}],'labels':{'console':'Redactie','stick':'Pennetjes altijd tonen','unstick':'Pennetjes tonen bij zweven','login':'Inloggen CMS'}}";
+            print;
+        }
+        header "Cache-Control" "public";
+        header "Content-Type" "application/json";
+        header "Vary" "Host";
+        header "Server" "";
+        header "P3P" "CP='NOI DSP MON CUR ADM DEV TAI OUR NOR STA'";
+        header "X-Frame-Options" "SAMEORIGIN";
+        header "Permissions-Policy" "fullscreen=self, geolocation=self";
+        header "Access-Control-Allow-Origin" "https://radboudgezichten.ru.nl";
+        header "X-Content-Type-Options" "nosniff";
+        header "Referrer-Policy" "strict-origin";
+        header "Date" "Sun, 11 Dec 2022 13:22:54 GMT";
+        header "Content-Length" "364";
+        header "X-Cache" "MISS from roesje02.uci.ru.nl";
+        header "X-Cache-Lookup" "MISS from roesje02.uci.ru.nl:80";
+        header "Connection" "close";
+        header "Strict-Transport-Security" "max-age=63072000; includeSubDomains; preload";
+    }
+}
+
+http-post {
+    set verb "POST";
+    set uri "/aspx/read.aspx";
+    client {
+        #header "Host" "www.ru.nl";
+        header "Accept" "application/json, text/javascript, */*; q=0.01";
+        header "Content-Type" "application/x-www-form-urlencoded; charset=UTF-8";
+        header "Referer" "https://www.ru.nl/";
+        header "Accept-Encoding" "gzip, deflate";
+        id {
+            mask;
+            base64url;
+            parameter "id";
+        }
+        # Hide beacon tasks in body
+        output {
+            mask;
+            base64url;
+            prepend "AppIdt=10000009&MwtIdt=16703&Ip";
+            append "xIdt=0&VarIdt=3297&ItmIdt=670677";
+            print;
+        }
+    }
+    server {
+        output {
+            mask;
+            base64url;
+            prepend "{'token':'','session_csrf_id':'3db520a3ae2d48a1b36917c938277538','startEnvIdt':'2','root':'https://cms.ru.nl/','elements':[{'id':'Ipx_0','screens':[{'alias':'login','size':'Small','a";
+            append "rgs':{'AppIdt':'00000000','exitAppIdt':'00000000'}}]}],'labels':{'console':'Redactie','stick':'Pennetjes altijd tonen','unstick':'Pennetjes tonen bij zweven','login':'Inloggen CMS'}}";
+            print;
+        }
+        header "Cache-Control" "public";
+        header "Content-Type" "application/json";
+        header "Vary" "Host";
+        header "Server" "";
+        header "P3P" "CP='NOI DSP MON CUR ADM DEV TAI OUR NOR STA'";
+        header "X-Frame-Options" "SAMEORIGIN";
+        header "Permissions-Policy" "fullscreen=self, geolocation=self";
+        header "Access-Control-Allow-Origin" "https://radboudgezichten.ru.nl";
+        header "X-Content-Type-Options" "nosniff";
+        header "Referrer-Policy" "strict-origin";
+        header "Date" "Sun, 11 Dec 2022 13:22:54 GMT";
+        header "Content-Length" "364";
+        header "X-Cache" "MISS from roesje02.uci.ru.nl";
+        header "X-Cache-Lookup" "MISS from roesje02.uci.ru.nl:80";
+        header "Connection" "close";
+        header "Strict-Transport-Security" "max-age=63072000; includeSubDomains; preload";
+    }
+}
